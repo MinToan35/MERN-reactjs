@@ -1,30 +1,39 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import AlertMessage from "../layout/Alert";
 const Login = () => {
   //Context
   const { loginUser } = useContext(AuthContext);
-  const Navigate = useNavigate();
+
   //localstage
   const [loginForm, setLoginForm] = useState({
     username: "",
     password: "",
   });
 
+  const [alert, setAlert] = useState(null);
+
   const { username, password } = loginForm;
   const onChangeLoginForm = (event) => {
     setLoginForm({ ...loginForm, [event.target.name]: event.target.value });
   };
+
   const login = async (event) => {
     event.preventDefault();
 
     try {
       const loginData = await loginUser(loginForm);
-      if (loginData.success) Navigate("/dashboard");
-      else {
+
+      if (loginData.success) {
+      }
+      if (loginData.success) {
+      } else {
+        setAlert({ type: "danger", message: loginData.message });
+        setTimeout(() => setAlert(null), 5000);
       }
     } catch (error) {
       console.log(error);
@@ -33,6 +42,7 @@ const Login = () => {
   return (
     <>
       <Form className="my-4" onSubmit={login}>
+        <AlertMessage info={alert}></AlertMessage>
         <Form.Group>
           <Form.Control
             type="text"
